@@ -2,6 +2,7 @@
 package codePackage;
 
 import java.awt.Color;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 
@@ -11,6 +12,56 @@ public class dashboardFrame extends javax.swing.JFrame {
     public dashboardFrame() {
         initComponents();
         parentpanel.setSelectedIndex(1);
+        clearTextF();
+    }
+    
+//    Object for Class Transaction
+    Transaction transaction = new Transaction();
+    
+    
+    
+    //    Private fields
+    private String t_type;
+    private String t_category;
+    private double t_amount;
+    private String t_date;
+    private String t_desc;
+    
+    private void addTransact(){
+        t_type = trans_type_txt.getText();
+        t_category = income_category_txt.getText();
+        t_amount = Double.parseDouble(income_amount_txt.getText());
+        t_date = ic_date_txt.getText();
+        t_desc = income_description_txt.getText();
+        
+        if(trans_type_txt.equals("") && income_category_txt.equals("") && 
+        income_amount_txt.equals("") && ic_date_txt.equals("") && 
+        income_description_txt.equals("")){
+            JOptionPane.showMessageDialog(this, "All fields are requiered!");
+        }
+        else{
+            transaction.setType(t_type);
+            transaction.setCategory(t_category);
+            transaction.setAmount(t_amount);
+            transaction.setDate(t_date);
+            transaction.setDescription(t_desc);
+
+            transaction.AddTransaction();
+            
+            clearTextF();
+            
+            JOptionPane.showMessageDialog(this, "Income has been recorded successfully!");
+            
+        }
+        
+    }
+    
+    private void clearTextF(){
+//        trans_type_txt.setText("");
+        income_category_txt.setText("");
+        income_amount_txt.setText("");
+        ic_date_txt.setText("");
+        income_description_txt.setText("");
     }
 
    
@@ -28,7 +79,7 @@ public class dashboardFrame extends javax.swing.JFrame {
         incobtn = new javax.swing.JLabel();
         expensepanel = new javax.swing.JPanel();
         exp_btn = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
+        logout = new javax.swing.JLabel();
         parentpanel = new javax.swing.JTabbedPane();
         expenseChild = new javax.swing.JPanel();
         jLabel15 = new javax.swing.JLabel();
@@ -57,11 +108,12 @@ public class dashboardFrame extends javax.swing.JFrame {
         jLabel22 = new javax.swing.JLabel();
         income_balance_show2 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
+        jSeparator1 = new javax.swing.JSeparator();
         incomechild = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         income_table = new javax.swing.JTable();
         jLabel7 = new javax.swing.JLabel();
-        trans_type = new javax.swing.JTextField();
+        trans_type_txt = new javax.swing.JTextField();
         jLabel9 = new javax.swing.JLabel();
         income_category_txt = new javax.swing.JTextField();
         jLabel10 = new javax.swing.JLabel();
@@ -70,7 +122,7 @@ public class dashboardFrame extends javax.swing.JFrame {
         jScrollPane3 = new javax.swing.JScrollPane();
         income_description_txt = new javax.swing.JTextArea();
         jLabel12 = new javax.swing.JLabel();
-        income_amount_txt1 = new javax.swing.JTextField();
+        ic_date_txt = new javax.swing.JTextField();
         add_btn = new javax.swing.JButton();
         update_btn = new javax.swing.JButton();
         income_balance_show = new javax.swing.JLabel();
@@ -203,7 +255,12 @@ public class dashboardFrame extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assetsPackage/log-out.png"))); // NOI18N
+        logout.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assetsPackage/log-out.png"))); // NOI18N
+        logout.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                logoutMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -224,7 +281,7 @@ public class dashboardFrame extends javax.swing.JFrame {
                 .addContainerGap())
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(70, 70, 70)
-                .addComponent(jLabel5)
+                .addComponent(logout)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -239,7 +296,7 @@ public class dashboardFrame extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(expensepanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 201, Short.MAX_VALUE)
-                .addComponent(jLabel5)
+                .addComponent(logout)
                 .addGap(36, 36, 36))
         );
 
@@ -254,7 +311,7 @@ public class dashboardFrame extends javax.swing.JFrame {
         expense_total_show.setBackground(new java.awt.Color(51, 51, 51));
         expense_total_show.setFont(new java.awt.Font("FreeMono", 1, 28)); // NOI18N
         expense_total_show.setForeground(new java.awt.Color(153, 0, 0));
-        expense_total_show.setText("40000");
+        expense_total_show.setText("40,000");
 
         jLabel17.setFont(new java.awt.Font("FreeMono", 1, 16)); // NOI18N
         jLabel17.setText("Transaction Type:");
@@ -342,16 +399,19 @@ public class dashboardFrame extends javax.swing.JFrame {
                                             .addComponent(trans_typetxt, javax.swing.GroupLayout.PREFERRED_SIZE, 222, javax.swing.GroupLayout.PREFERRED_SIZE))
                                         .addGroup(expenseChildLayout.createSequentialGroup()
                                             .addComponent(jLabel18)
-                                            .addGap(122, 122, 122)
+                                            .addGap(73, 73, 73)
                                             .addComponent(expense_amount_txt, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                    .addGap(32, 32, 32)
+                                    .addGap(42, 42, 42)
                                     .addGroup(expenseChildLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                         .addComponent(jLabel20)
                                         .addComponent(jLabel19))
-                                    .addGap(34, 34, 34)
-                                    .addGroup(expenseChildLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                        .addComponent(expense_date_txt)
-                                        .addComponent(expense_category_txt, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addGroup(expenseChildLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(expenseChildLayout.createSequentialGroup()
+                                            .addGap(34, 34, 34)
+                                            .addComponent(expense_category_txt, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGroup(expenseChildLayout.createSequentialGroup()
+                                            .addGap(1, 1, 1)
+                                            .addComponent(expense_date_txt, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE))))
                                 .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 805, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                 .addContainerGap(114, Short.MAX_VALUE))
         );
@@ -371,15 +431,12 @@ public class dashboardFrame extends javax.swing.JFrame {
                         .addGap(51, 51, 51)
                         .addGroup(expenseChildLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel18)
-                            .addComponent(expense_amount_txt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(expenseChildLayout.createSequentialGroup()
-                        .addComponent(expense_category_txt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(51, 51, 51)
-                        .addComponent(expense_date_txt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(expenseChildLayout.createSequentialGroup()
-                        .addComponent(jLabel20)
-                        .addGap(55, 55, 55)
-                        .addComponent(jLabel19)))
+                            .addComponent(expense_amount_txt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(expenseChildLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(jLabel19)
+                                .addComponent(expense_date_txt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addComponent(expense_category_txt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel20))
                 .addGap(43, 43, 43)
                 .addGroup(expenseChildLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(expenseChildLayout.createSequentialGroup()
@@ -433,15 +490,23 @@ public class dashboardFrame extends javax.swing.JFrame {
 
         jPanel3.setBackground(new java.awt.Color(102, 102, 255));
 
+        jSeparator1.setOrientation(javax.swing.SwingConstants.VERTICAL);
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(384, 384, 384))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 295, Short.MAX_VALUE)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(24, 24, 24)
+                .addComponent(jSeparator1, javax.swing.GroupLayout.DEFAULT_SIZE, 259, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout homechildLayout = new javax.swing.GroupLayout(homechild);
@@ -510,9 +575,9 @@ public class dashboardFrame extends javax.swing.JFrame {
         jLabel7.setFont(new java.awt.Font("FreeMono", 1, 16)); // NOI18N
         jLabel7.setText("Transaction Type:");
 
-        trans_type.setEditable(false);
-        trans_type.setFont(new java.awt.Font("FreeMono", 1, 16)); // NOI18N
-        trans_type.setText("Income");
+        trans_type_txt.setEditable(false);
+        trans_type_txt.setFont(new java.awt.Font("FreeMono", 1, 16)); // NOI18N
+        trans_type_txt.setText("Income");
 
         jLabel9.setFont(new java.awt.Font("FreeMono", 1, 16)); // NOI18N
         jLabel9.setText("Category:");
@@ -524,7 +589,7 @@ public class dashboardFrame extends javax.swing.JFrame {
         jLabel10.setText("Amount:");
 
         income_amount_txt.setFont(new java.awt.Font("FreeMono", 1, 16)); // NOI18N
-        income_amount_txt.setText("Salary");
+        income_amount_txt.setText("40000");
 
         jLabel11.setFont(new java.awt.Font("FreeMono", 1, 16)); // NOI18N
         jLabel11.setText("Description:");
@@ -537,11 +602,16 @@ public class dashboardFrame extends javax.swing.JFrame {
         jLabel12.setFont(new java.awt.Font("FreeMono", 1, 16)); // NOI18N
         jLabel12.setText("Date:");
 
-        income_amount_txt1.setFont(new java.awt.Font("FreeMono", 1, 16)); // NOI18N
-        income_amount_txt1.setText("01/09/24");
+        ic_date_txt.setFont(new java.awt.Font("FreeMono", 1, 16)); // NOI18N
+        ic_date_txt.setText("01/09/24");
 
         add_btn.setFont(new java.awt.Font("FreeMono", 0, 16)); // NOI18N
         add_btn.setText("ADD");
+        add_btn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                add_btnMouseClicked(evt);
+            }
+        });
 
         update_btn.setFont(new java.awt.Font("FreeMono", 0, 16)); // NOI18N
         update_btn.setText("UPDATE");
@@ -549,7 +619,7 @@ public class dashboardFrame extends javax.swing.JFrame {
         income_balance_show.setBackground(new java.awt.Color(51, 51, 51));
         income_balance_show.setFont(new java.awt.Font("FreeMono", 1, 28)); // NOI18N
         income_balance_show.setForeground(new java.awt.Color(51, 102, 0));
-        income_balance_show.setText("40000");
+        income_balance_show.setText("40,000");
 
         jLabel14.setFont(new java.awt.Font("FreeMono", 1, 28)); // NOI18N
         jLabel14.setForeground(new java.awt.Color(51, 102, 0));
@@ -573,32 +643,40 @@ public class dashboardFrame extends javax.swing.JFrame {
                                 .addComponent(jLabel14)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(income_balance_show))
-                            .addGroup(incomechildLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(incomechildLayout.createSequentialGroup()
-                                    .addGap(244, 244, 244)
-                                    .addComponent(add_btn)
-                                    .addGap(138, 138, 138)
-                                    .addComponent(update_btn))
-                                .addGroup(incomechildLayout.createSequentialGroup()
-                                    .addGroup(incomechildLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addGroup(incomechildLayout.createSequentialGroup()
-                                            .addComponent(jLabel7)
-                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                            .addComponent(trans_type, javax.swing.GroupLayout.PREFERRED_SIZE, 222, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addGroup(incomechildLayout.createSequentialGroup()
-                                            .addComponent(jLabel10)
-                                            .addGap(122, 122, 122)
-                                            .addComponent(income_amount_txt, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                    .addGap(32, 32, 32)
-                                    .addGroup(incomechildLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(jLabel9)
-                                        .addComponent(jLabel12))
-                                    .addGap(34, 34, 34)
-                                    .addGroup(incomechildLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                        .addComponent(income_amount_txt1)
-                                        .addComponent(income_category_txt, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 805, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addContainerGap(114, Short.MAX_VALUE))
+                            .addGroup(incomechildLayout.createSequentialGroup()
+                                .addGroup(incomechildLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(incomechildLayout.createSequentialGroup()
+                                        .addGap(244, 244, 244)
+                                        .addComponent(add_btn)
+                                        .addGap(138, 138, 138)
+                                        .addComponent(update_btn))
+                                    .addGroup(incomechildLayout.createSequentialGroup()
+                                        .addGroup(incomechildLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                            .addGroup(incomechildLayout.createSequentialGroup()
+                                                .addComponent(jLabel7)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                                .addComponent(trans_type_txt, javax.swing.GroupLayout.PREFERRED_SIZE, 222, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGap(10, 10, 10))
+                                            .addGroup(incomechildLayout.createSequentialGroup()
+                                                .addComponent(jLabel10)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                .addComponent(income_amount_txt, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGap(39, 39, 39)))
+                                        .addGroup(incomechildLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                            .addGroup(incomechildLayout.createSequentialGroup()
+                                                .addGap(32, 32, 32)
+                                                .addComponent(jLabel9)
+                                                .addGap(34, 34, 34)
+                                                .addComponent(income_category_txt, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addGroup(incomechildLayout.createSequentialGroup()
+                                                .addGap(43, 43, 43)
+                                                .addComponent(jLabel12)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                .addComponent(ic_date_txt, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGap(95, 95, 95))))
+                                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 805, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)))))
+                .addGap(104, 104, 104))
         );
         incomechildLayout.setVerticalGroup(
             incomechildLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -609,23 +687,25 @@ public class dashboardFrame extends javax.swing.JFrame {
                     .addComponent(jLabel14))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 79, Short.MAX_VALUE)
                 .addGroup(incomechildLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(incomechildLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addComponent(income_category_txt, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(incomechildLayout.createSequentialGroup()
+                            .addComponent(jLabel9)
+                            .addGap(115, 115, 115)))
                     .addGroup(incomechildLayout.createSequentialGroup()
-                        .addGroup(incomechildLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel7)
-                            .addComponent(trans_type, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(51, 51, 51)
-                        .addGroup(incomechildLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel10)
-                            .addComponent(income_amount_txt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(incomechildLayout.createSequentialGroup()
-                        .addComponent(income_category_txt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(51, 51, 51)
-                        .addComponent(income_amount_txt1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(incomechildLayout.createSequentialGroup()
-                        .addComponent(jLabel9)
-                        .addGap(55, 55, 55)
-                        .addComponent(jLabel12)))
-                .addGap(43, 43, 43)
+                        .addGroup(incomechildLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(incomechildLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(ic_date_txt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jLabel12))
+                            .addGroup(incomechildLayout.createSequentialGroup()
+                                .addGroup(incomechildLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jLabel7)
+                                    .addComponent(trans_type_txt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(51, 51, 51)
+                                .addGroup(incomechildLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jLabel10)
+                                    .addComponent(income_amount_txt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGap(43, 43, 43)))
                 .addGroup(incomechildLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(incomechildLayout.createSequentialGroup()
                         .addGap(10, 10, 10)
@@ -698,6 +778,14 @@ public class dashboardFrame extends javax.swing.JFrame {
         parentpanel.setSelectedIndex(1);
     }//GEN-LAST:event_homtxtbtnMouseClicked
 
+    private void logoutMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_logoutMouseClicked
+        this.dispose();
+    }//GEN-LAST:event_logoutMouseClicked
+
+    private void add_btnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_add_btnMouseClicked
+       addTransact();
+    }//GEN-LAST:event_add_btnMouseClicked
+
 //   Animations
      public void setColor(JPanel pane1){
          pane1.setBackground(new Color(51,51,51));
@@ -763,9 +851,9 @@ public class dashboardFrame extends javax.swing.JFrame {
     private javax.swing.JPanel home;
     private javax.swing.JPanel homechild;
     private javax.swing.JLabel homtxtbtn;
+    private javax.swing.JTextField ic_date_txt;
     private javax.swing.JLabel incobtn;
     private javax.swing.JTextField income_amount_txt;
-    private javax.swing.JTextField income_amount_txt1;
     private javax.swing.JLabel income_balance_show;
     private javax.swing.JLabel income_balance_show1;
     private javax.swing.JLabel income_balance_show2;
@@ -787,7 +875,6 @@ public class dashboardFrame extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel22;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel9;
@@ -799,10 +886,12 @@ public class dashboardFrame extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
+    private javax.swing.JSeparator jSeparator1;
     private javax.swing.JTable jTable1;
+    private javax.swing.JLabel logout;
     private javax.swing.JPanel mainpanel;
     private javax.swing.JTabbedPane parentpanel;
-    private javax.swing.JTextField trans_type;
+    private javax.swing.JTextField trans_type_txt;
     private javax.swing.JTextField trans_typetxt;
     private javax.swing.JButton update_btn;
     private javax.swing.JButton update_expense_btn;
