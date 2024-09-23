@@ -16,30 +16,31 @@ public class dashboardFrame extends javax.swing.JFrame {
     }
     
 //    Object for Class Transaction
-    Transaction transaction = new Transaction();
+    Transaction transaction = new Transaction();  
     
-    
-    
-    //    Private fields
+      //    Private fields
     private String t_type;
     private String t_category;
     private double t_amount;
     private String t_date;
     private String t_desc;
     
-    private void addTransact(){
-        t_type = trans_type_txt.getText();
-        t_category = income_category_txt.getText();
-        t_amount = Double.parseDouble(income_amount_txt.getText());
-        t_date = ic_date_txt.getText();
-        t_desc = income_description_txt.getText();
+    private void addIncomeTransact(){
         
-        if(trans_type_txt.equals("") && income_category_txt.equals("") && 
-        income_amount_txt.equals("") && ic_date_txt.equals("") && 
-        income_description_txt.equals("")){
-            JOptionPane.showMessageDialog(this, "All fields are requiered!");
-        }
+         if(income_category_txt.getText().isEmpty() && 
+        income_amount_txt.getText().isEmpty() && ic_date_txt.getText().isEmpty() && 
+        income_description_txt.getText().isEmpty()){
+            JOptionPane.showMessageDialog(this, "All fields are requiered!", "Error", HEIGHT);
+        }      
         else{
+             
+            t_type = trans_type_txt.getText();
+            t_category = income_category_txt.getText();
+            t_amount = Double.parseDouble(income_amount_txt.getText());
+            t_date = ic_date_txt.getText();
+            t_desc = income_description_txt.getText();
+             
+             
             transaction.setType(t_type);
             transaction.setCategory(t_category);
             transaction.setAmount(t_amount);
@@ -48,16 +49,49 @@ public class dashboardFrame extends javax.swing.JFrame {
 
             transaction.AddTransaction();
             
+                        
+            JOptionPane.showMessageDialog(this, transaction.getMessage());
+            
             clearTextF();
             
-            JOptionPane.showMessageDialog(this, "Income has been recorded successfully!");
+        }
+        
+    }
+    
+    private void addExpenseTransact(){        
+        
+        if(expense_category_txt.getText().isEmpty() && 
+        expense_amount_txt.getText().isEmpty() && expense_date_txt.getText().isEmpty() && 
+        expense_description_txt.getText().isEmpty()){
+            JOptionPane.showMessageDialog(this, "All fields are requiered!");
+        }
+        else{
+            
+            t_type = trans_typetxt.getText();
+            t_category = expense_category_txt.getText();
+            t_amount = Double.parseDouble(expense_amount_txt.getText());
+            t_date = expense_date_txt.getText();
+            t_desc = expense_description_txt.getText();
+            
+            
+            transaction.setType(t_type);
+            transaction.setCategory(t_category);
+            transaction.setAmount(t_amount);
+            transaction.setDate(t_date);
+            transaction.setDescription(t_desc);
+
+            transaction.AddTransaction();
+            
+                        
+            JOptionPane.showMessageDialog(this, transaction.getMessage());
+            
+            clearTextF();
             
         }
         
     }
     
     private void clearTextF(){
-//        trans_type_txt.setText("");
         income_category_txt.setText("");
         income_amount_txt.setText("");
         ic_date_txt.setText("");
@@ -324,10 +358,8 @@ public class dashboardFrame extends javax.swing.JFrame {
         jLabel18.setText("Amount:");
 
         expense_amount_txt.setFont(new java.awt.Font("FreeMono", 1, 16)); // NOI18N
-        expense_amount_txt.setText("40000");
 
         expense_date_txt.setFont(new java.awt.Font("FreeMono", 1, 16)); // NOI18N
-        expense_date_txt.setText("01/09/24");
 
         jLabel19.setFont(new java.awt.Font("FreeMono", 1, 16)); // NOI18N
         jLabel19.setText("Date:");
@@ -336,7 +368,6 @@ public class dashboardFrame extends javax.swing.JFrame {
         jLabel20.setText("Category:");
 
         expense_category_txt.setFont(new java.awt.Font("FreeMono", 1, 16)); // NOI18N
-        expense_category_txt.setText("Rent");
 
         expense_description_txt.setColumns(10);
         expense_description_txt.setFont(new java.awt.Font("FreeMono", 0, 16)); // NOI18N
@@ -348,6 +379,11 @@ public class dashboardFrame extends javax.swing.JFrame {
 
         add_expense_btn.setFont(new java.awt.Font("FreeMono", 0, 16)); // NOI18N
         add_expense_btn.setText("ADD");
+        add_expense_btn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                add_expense_btnMouseClicked(evt);
+            }
+        });
 
         update_expense_btn.setFont(new java.awt.Font("FreeMono", 0, 16)); // NOI18N
         update_expense_btn.setText("UPDATE");
@@ -429,12 +465,13 @@ public class dashboardFrame extends javax.swing.JFrame {
                             .addComponent(jLabel17)
                             .addComponent(trans_typetxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(51, 51, 51)
-                        .addGroup(expenseChildLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel18)
-                            .addComponent(expense_amount_txt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(expenseChildLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(expenseChildLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                 .addComponent(jLabel19)
-                                .addComponent(expense_date_txt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addComponent(expense_date_txt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(expenseChildLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(jLabel18)
+                                .addComponent(expense_amount_txt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addComponent(expense_category_txt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel20))
                 .addGap(43, 43, 43)
@@ -779,12 +816,20 @@ public class dashboardFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_homtxtbtnMouseClicked
 
     private void logoutMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_logoutMouseClicked
-        this.dispose();
+        int option = JOptionPane.showConfirmDialog(this, "Are you sure you want to logout?!", "Confirm", WIDTH);
+        
+        if(option != 2 && option != 1){
+            this.dispose();
+        }        
     }//GEN-LAST:event_logoutMouseClicked
 
     private void add_btnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_add_btnMouseClicked
-       addTransact();
+       addIncomeTransact();
     }//GEN-LAST:event_add_btnMouseClicked
+
+    private void add_expense_btnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_add_expense_btnMouseClicked
+        addExpenseTransact();
+    }//GEN-LAST:event_add_expense_btnMouseClicked
 
 //   Animations
      public void setColor(JPanel pane1){

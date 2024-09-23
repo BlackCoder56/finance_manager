@@ -3,13 +3,13 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.Statement;
 import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+//import java.util.logging.Level;
+//import java.util.logging.Logger;
 
 
 public class Transaction {
     
-//    Connection object
+//    Connection object  
     Connection conn = null;
     
     Statement statement;
@@ -21,7 +21,10 @@ public class Transaction {
     private String transaction_date;
     private String transaction_description;
     
+    private String message;
     
+    
+/*    setters and getters functions     */
     
     public void setType(String type)
     {
@@ -47,7 +50,12 @@ public class Transaction {
     {
         this.transaction_description = description;
     }
-//    type | category | amount | date | description
+    
+    public String getMessage(){
+        return message;
+    }
+
+/*  Adding transaction in database */
     public void AddTransaction(){
         try {
             Class.forName("org.postgresql.Driver");
@@ -59,13 +67,16 @@ public class Transaction {
                     transaction_type, transaction_category, transaction_amount, transaction_date, transaction_description);
             statement = conn.createStatement();
             statement.executeUpdate(query);
+            
+            message = "Transaction added successfully";
+            
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(Transaction.class.getName()).log(Level.SEVERE, null, ex);
+//            Logger.getLogger(Transaction.class.getName()).log(Level.SEVERE, null, ex);
+                message = "SQL error";
         } catch (SQLException ex) {
-            Logger.getLogger(Transaction.class.getName()).log(Level.SEVERE, null, ex);
+//            Logger.getLogger(Transaction.class.getName()).log(Level.SEVERE, null, ex);
+                message = "SQL authentication error";
         }
-    }
-    
+    }   
 
-   
 }
