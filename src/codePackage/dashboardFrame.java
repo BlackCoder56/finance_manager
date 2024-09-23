@@ -5,6 +5,18 @@ import java.awt.Color;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.Statement;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.table.DefaultTableModel;
+
 
 public class dashboardFrame extends javax.swing.JFrame {
 
@@ -14,8 +26,17 @@ public class dashboardFrame extends javax.swing.JFrame {
         parentpanel.setSelectedIndex(1);
         income_balance_show.setText(incomeBalance);
         expense_total_show.setText(expenseBalance);
+        
+        AllTransactions();
+        
+        homeIncomeShow.setText(String.format("%,.1f", transaction.getIncomeBalance()));
+        homeExpenseShow.setText(String.format("%, .1f", transaction.getExpenseBalance()));
+        
         clearTextF();
+        clearTextE();
     }
+    
+ 
     
 //   Object for Class Transaction
     Transaction transaction = new Transaction();  
@@ -30,6 +51,56 @@ public class dashboardFrame extends javax.swing.JFrame {
     private String incomeBalance = transaction.getIncomeBalance().toString();
     private String expenseBalance = transaction.getExpenseBalance().toString();
     
+    
+    public void AllTransactions(){
+        Connection conn;
+        PreparedStatement pst;
+        ResultSet rs;
+        try {
+            Class.forName("org.postgresql.Driver");
+            conn = DriverManager.getConnection("jdbc:postgresql://localhost:5432/"+"financemanager", "postgres", "");
+            
+            pst = conn.prepareStatement("SELECT * FROM transaction_tbl ORDER BY id DESC;");
+            rs = pst.executeQuery();
+            ResultSetMetaData Rsm = rs.getMetaData();
+            
+            int countr;
+            countr = Rsm.getColumnCount();
+            
+            DefaultTableModel tableModel = (DefaultTableModel)transactiontbl.getModel();
+            tableModel.setRowCount(0);
+            
+            while(rs.next()){
+                
+                Vector vector = new Vector();
+                
+                for(int i = 1; i <= countr; i++)
+                {
+                vector.add("TID0"+rs.getString("id"));
+                vector.add(rs.getString("type"));
+                vector.add(rs.getString("category"));
+                vector.add(rs.getDouble("amount"));
+                vector.add(rs.getString("date"));
+                vector.add(rs.getString("description"));
+                
+
+                
+                }
+                
+                tableModel.addRow(vector);
+                
+            }
+            
+            
+        
+
+        }   catch (ClassNotFoundException ex) {
+            Logger.getLogger(dashboardFrame.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(dashboardFrame.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }   
+ 
     private void addIncomeTransact(){
         
          if(income_category_txt.getText().isEmpty() && 
@@ -58,6 +129,12 @@ public class dashboardFrame extends javax.swing.JFrame {
             
                         
             JOptionPane.showMessageDialog(this, transaction.getMessage());
+            
+            income_balance_show.setText(incomeBalance);
+            expense_total_show.setText(expenseBalance);
+
+            homeIncomeShow.setText(incomeBalance);
+            homeExpenseShow.setText(expenseBalance);
             
             clearTextF();
             
@@ -93,6 +170,12 @@ public class dashboardFrame extends javax.swing.JFrame {
             
                         
             JOptionPane.showMessageDialog(this, transaction.getMessage());
+            
+            income_balance_show.setText(incomeBalance);
+            expense_total_show.setText(expenseBalance);
+
+            homeIncomeShow.setText(incomeBalance);
+            homeExpenseShow.setText(expenseBalance);
             
             clearTextE();
             
@@ -132,8 +215,6 @@ public class dashboardFrame extends javax.swing.JFrame {
         logout = new javax.swing.JLabel();
         parentpanel = new javax.swing.JTabbedPane();
         expenseChild = new javax.swing.JPanel();
-        jLabel15 = new javax.swing.JLabel();
-        expense_total_show = new javax.swing.JLabel();
         jLabel17 = new javax.swing.JLabel();
         trans_typetxt = new javax.swing.JTextField();
         jLabel18 = new javax.swing.JLabel();
@@ -149,14 +230,19 @@ public class dashboardFrame extends javax.swing.JFrame {
         update_expense_btn = new javax.swing.JButton();
         jScrollPane5 = new javax.swing.JScrollPane();
         expense_table = new javax.swing.JTable();
+        jPanel7 = new javax.swing.JPanel();
+        jLabel15 = new javax.swing.JLabel();
+        expense_total_show = new javax.swing.JLabel();
         homechild = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        transactiontbl = new javax.swing.JTable();
+        jPanel4 = new javax.swing.JPanel();
+        homeIncomeShow = new javax.swing.JLabel();
         jLabel16 = new javax.swing.JLabel();
-        income_balance_show1 = new javax.swing.JLabel();
         jLabel22 = new javax.swing.JLabel();
-        income_balance_show2 = new javax.swing.JLabel();
+        homeExpenseShow = new javax.swing.JLabel();
+        jPanel5 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         jSeparator1 = new javax.swing.JSeparator();
         incomechild = new javax.swing.JPanel();
@@ -175,6 +261,7 @@ public class dashboardFrame extends javax.swing.JFrame {
         ic_date_txt = new javax.swing.JTextField();
         add_btn = new javax.swing.JButton();
         update_btn = new javax.swing.JButton();
+        jPanel6 = new javax.swing.JPanel();
         income_balance_show = new javax.swing.JLabel();
         jLabel14 = new javax.swing.JLabel();
 
@@ -354,15 +441,6 @@ public class dashboardFrame extends javax.swing.JFrame {
 
         expenseChild.setBackground(new java.awt.Color(204, 204, 204));
 
-        jLabel15.setFont(new java.awt.Font("FreeMono", 1, 28)); // NOI18N
-        jLabel15.setForeground(new java.awt.Color(153, 0, 0));
-        jLabel15.setText("Expense Total:sh.");
-
-        expense_total_show.setBackground(new java.awt.Color(51, 51, 51));
-        expense_total_show.setFont(new java.awt.Font("FreeMono", 1, 28)); // NOI18N
-        expense_total_show.setForeground(new java.awt.Color(153, 0, 0));
-        expense_total_show.setText("40,000");
-
         jLabel17.setFont(new java.awt.Font("FreeMono", 1, 16)); // NOI18N
         jLabel17.setText("Transaction Type:");
 
@@ -419,6 +497,38 @@ public class dashboardFrame extends javax.swing.JFrame {
             expense_table.getColumnModel().getColumn(0).setMaxWidth(100);
         }
 
+        jPanel7.setBackground(new java.awt.Color(102, 102, 102));
+        jPanel7.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(51, 51, 51), 4));
+
+        jLabel15.setFont(new java.awt.Font("FreeMono", 1, 28)); // NOI18N
+        jLabel15.setForeground(new java.awt.Color(153, 0, 0));
+        jLabel15.setText("Expense Total:sh.");
+
+        expense_total_show.setBackground(new java.awt.Color(51, 51, 51));
+        expense_total_show.setFont(new java.awt.Font("FreeMono", 1, 28)); // NOI18N
+        expense_total_show.setForeground(new java.awt.Color(153, 0, 0));
+        expense_total_show.setText("40,000");
+
+        javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
+        jPanel7.setLayout(jPanel7Layout);
+        jPanel7Layout.setHorizontalGroup(
+            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel7Layout.createSequentialGroup()
+                .addContainerGap(14, Short.MAX_VALUE)
+                .addComponent(jLabel15)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(expense_total_show, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+        jPanel7Layout.setVerticalGroup(
+            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel7Layout.createSequentialGroup()
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(expense_total_show)
+                    .addComponent(jLabel15))
+                .addGap(0, 0, Short.MAX_VALUE))
+        );
+
         javax.swing.GroupLayout expenseChildLayout = new javax.swing.GroupLayout(expenseChild);
         expenseChild.setLayout(expenseChildLayout);
         expenseChildLayout.setHorizontalGroup(
@@ -460,22 +570,18 @@ public class dashboardFrame extends javax.swing.JFrame {
                                         .addGap(1, 1, 1)
                                         .addComponent(expense_date_txt, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE))))
                             .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 805, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(34, 303, Short.MAX_VALUE))
+                .addGap(34, 135, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, expenseChildLayout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jLabel15)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(expense_total_show, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(66, 66, 66))
+                .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(297, 297, 297))
         );
         expenseChildLayout.setVerticalGroup(
             expenseChildLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(expenseChildLayout.createSequentialGroup()
-                .addGap(29, 29, 29)
-                .addGroup(expenseChildLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(expense_total_show)
-                    .addComponent(jLabel15))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 84, Short.MAX_VALUE)
+                .addGap(20, 20, 20)
+                .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 105, Short.MAX_VALUE)
                 .addGroup(expenseChildLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(expenseChildLayout.createSequentialGroup()
                         .addGroup(expenseChildLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -513,34 +619,92 @@ public class dashboardFrame extends javax.swing.JFrame {
         jLabel6.setFont(new java.awt.Font("FreeMono", 0, 24)); // NOI18N
         jLabel6.setText("Recent Transactions:");
 
-        jTable1.setBackground(new java.awt.Color(204, 204, 204));
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        transactiontbl.setBackground(new java.awt.Color(204, 204, 204));
+        transactiontbl.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
                 "ID", "Type", "Category", "Amount", "Date", "Description"
             }
-        ));
-        jScrollPane1.setViewportView(jTable1);
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.Double.class, java.lang.String.class, java.lang.String.class
+            };
 
-        jLabel16.setFont(new java.awt.Font("FreeMono", 1, 24)); // NOI18N
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+        });
+        jScrollPane1.setViewportView(transactiontbl);
+        if (transactiontbl.getColumnModel().getColumnCount() > 0) {
+            transactiontbl.getColumnModel().getColumn(0).setMinWidth(50);
+            transactiontbl.getColumnModel().getColumn(0).setMaxWidth(50);
+        }
+
+        jPanel4.setBackground(new java.awt.Color(102, 102, 102));
+        jPanel4.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(51, 51, 51), 4));
+
+        homeIncomeShow.setBackground(new java.awt.Color(51, 51, 51));
+        homeIncomeShow.setFont(new java.awt.Font("FreeMono", 1, 22)); // NOI18N
+        homeIncomeShow.setForeground(new java.awt.Color(51, 102, 0));
+        homeIncomeShow.setText("40000");
+
+        jLabel16.setFont(new java.awt.Font("FreeMono", 1, 22)); // NOI18N
         jLabel16.setForeground(new java.awt.Color(51, 102, 0));
-        jLabel16.setText("Income Balance:");
+        jLabel16.setText("Income Balance:shs.");
 
-        income_balance_show1.setBackground(new java.awt.Color(51, 51, 51));
-        income_balance_show1.setFont(new java.awt.Font("FreeMono", 1, 24)); // NOI18N
-        income_balance_show1.setForeground(new java.awt.Color(51, 102, 0));
-        income_balance_show1.setText("40000");
-
-        jLabel22.setFont(new java.awt.Font("FreeMono", 1, 24)); // NOI18N
+        jLabel22.setFont(new java.awt.Font("FreeMono", 1, 22)); // NOI18N
         jLabel22.setForeground(new java.awt.Color(153, 0, 0));
-        jLabel22.setText("Exp.Balance:");
+        jLabel22.setText("Exp.Balance:shs.");
 
-        income_balance_show2.setBackground(new java.awt.Color(51, 51, 51));
-        income_balance_show2.setFont(new java.awt.Font("FreeMono", 1, 24)); // NOI18N
-        income_balance_show2.setForeground(new java.awt.Color(153, 0, 0));
-        income_balance_show2.setText("40000");
+        homeExpenseShow.setBackground(new java.awt.Color(51, 51, 51));
+        homeExpenseShow.setFont(new java.awt.Font("FreeMono", 1, 22)); // NOI18N
+        homeExpenseShow.setForeground(new java.awt.Color(153, 0, 0));
+        homeExpenseShow.setText("40000");
+
+        jPanel5.setBackground(new java.awt.Color(51, 51, 51));
+
+        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
+        jPanel5.setLayout(jPanel5Layout);
+        jPanel5Layout.setHorizontalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 8, Short.MAX_VALUE)
+        );
+        jPanel5Layout.setVerticalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 72, Short.MAX_VALUE)
+        );
+
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel16)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(homeIncomeShow, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel22)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(homeExpenseShow, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addGap(3, 3, 3)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(homeExpenseShow)
+                    .addComponent(jLabel22)))
+            .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addComponent(homeIncomeShow)
+                .addComponent(jLabel16))
+        );
 
         jPanel3.setBackground(new java.awt.Color(102, 102, 255));
 
@@ -550,60 +714,47 @@ public class dashboardFrame extends javax.swing.JFrame {
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(384, 384, 384))
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(394, 394, 394)
+                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 12, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(24, 24, 24)
-                .addComponent(jSeparator1, javax.swing.GroupLayout.DEFAULT_SIZE, 259, Short.MAX_VALUE)
-                .addContainerGap())
+                .addContainerGap()
+                .addComponent(jSeparator1, javax.swing.GroupLayout.DEFAULT_SIZE, 208, Short.MAX_VALUE)
+                .addGap(24, 24, 24))
         );
 
         javax.swing.GroupLayout homechildLayout = new javax.swing.GroupLayout(homechild);
         homechild.setLayout(homechildLayout);
         homechildLayout.setHorizontalGroup(
             homechildLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, homechildLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(homechildLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(homechildLayout.createSequentialGroup()
-                        .addComponent(jLabel16)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(income_balance_show1))
-                    .addGroup(homechildLayout.createSequentialGroup()
-                        .addComponent(jLabel22)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(income_balance_show2)))
-                .addGap(82, 82, 82))
             .addGroup(homechildLayout.createSequentialGroup()
-                .addGap(66, 66, 66)
-                .addGroup(homechildLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jLabel6)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 814, Short.MAX_VALUE)
-                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(284, Short.MAX_VALUE))
+                .addGroup(homechildLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(homechildLayout.createSequentialGroup()
+                        .addGap(66, 66, 66)
+                        .addGroup(homechildLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jLabel6)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 823, Short.MAX_VALUE)
+                            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addGroup(homechildLayout.createSequentialGroup()
+                        .addGap(81, 81, 81)
+                        .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(107, Short.MAX_VALUE))
         );
         homechildLayout.setVerticalGroup(
             homechildLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(homechildLayout.createSequentialGroup()
-                .addGap(21, 21, 21)
-                .addGroup(homechildLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel16)
-                    .addComponent(income_balance_show1))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(homechildLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel22)
-                    .addComponent(income_balance_show2))
-                .addGap(18, 18, 18)
-                .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(18, 18, 18)
+                .addGap(23, 23, 23)
+                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 70, Short.MAX_VALUE)
+                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(32, 32, 32)
                 .addComponent(jLabel6)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 218, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(21, 21, 21))
         );
 
@@ -670,35 +821,51 @@ public class dashboardFrame extends javax.swing.JFrame {
         update_btn.setFont(new java.awt.Font("FreeMono", 0, 16)); // NOI18N
         update_btn.setText("UPDATE");
 
+        jPanel6.setBackground(new java.awt.Color(102, 102, 102));
+        jPanel6.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(51, 51, 51), 4));
+
         income_balance_show.setBackground(new java.awt.Color(51, 51, 51));
         income_balance_show.setFont(new java.awt.Font("FreeMono", 1, 28)); // NOI18N
-        income_balance_show.setForeground(new java.awt.Color(51, 102, 0));
+        income_balance_show.setForeground(new java.awt.Color(0, 153, 0));
         income_balance_show.setText("40,000");
 
         jLabel14.setFont(new java.awt.Font("FreeMono", 1, 28)); // NOI18N
-        jLabel14.setForeground(new java.awt.Color(51, 102, 0));
+        jLabel14.setForeground(new java.awt.Color(0, 153, 0));
         jLabel14.setText("Income Balance:shs.");
+
+        javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
+        jPanel6.setLayout(jPanel6Layout);
+        jPanel6Layout.setHorizontalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel14)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(income_balance_show, javax.swing.GroupLayout.DEFAULT_SIZE, 174, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        jPanel6Layout.setVerticalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addComponent(income_balance_show)
+                .addComponent(jLabel14))
+        );
 
         javax.swing.GroupLayout incomechildLayout = new javax.swing.GroupLayout(incomechild);
         incomechild.setLayout(incomechildLayout);
         incomechildLayout.setHorizontalGroup(
             incomechildLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(incomechildLayout.createSequentialGroup()
-                .addGap(56, 56, 56)
-                .addGroup(incomechildLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(incomechildLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(incomechildLayout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jLabel14)
-                        .addGap(18, 18, 18)
-                        .addComponent(income_balance_show, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(36, 36, 36))
-                    .addGroup(incomechildLayout.createSequentialGroup()
+                        .addGap(56, 56, 56)
                         .addGroup(incomechildLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(incomechildLayout.createSequentialGroup()
                                 .addGap(244, 244, 244)
                                 .addComponent(add_btn)
                                 .addGap(138, 138, 138)
                                 .addComponent(update_btn))
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 805, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(incomechildLayout.createSequentialGroup()
                                 .addGroup(incomechildLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addGroup(incomechildLayout.createSequentialGroup()
@@ -722,24 +889,23 @@ public class dashboardFrame extends javax.swing.JFrame {
                                         .addComponent(jLabel12)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                         .addComponent(ic_date_txt, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(95, 95, 95))))
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 805, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addContainerGap(303, Short.MAX_VALUE))))
-            .addGroup(incomechildLayout.createSequentialGroup()
-                .addGap(144, 144, 144)
-                .addComponent(jLabel11)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 365, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(104, 104, 104))
+                                        .addGap(95, 95, 95))))))
+                    .addGroup(incomechildLayout.createSequentialGroup()
+                        .addGap(144, 144, 144)
+                        .addComponent(jLabel11)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 365, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(incomechildLayout.createSequentialGroup()
+                        .addGap(211, 211, 211)
+                        .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(135, Short.MAX_VALUE))
         );
         incomechildLayout.setVerticalGroup(
             incomechildLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(incomechildLayout.createSequentialGroup()
-                .addGap(34, 34, 34)
-                .addGroup(incomechildLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(income_balance_show)
-                    .addComponent(jLabel14))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 79, Short.MAX_VALUE)
+                .addGap(20, 20, 20)
+                .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 105, Short.MAX_VALUE)
                 .addGroup(incomechildLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(incomechildLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                         .addComponent(income_category_txt, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -911,14 +1077,14 @@ public class dashboardFrame extends javax.swing.JFrame {
     private javax.swing.JLabel expense_total_show;
     private javax.swing.JPanel expensepanel;
     private javax.swing.JPanel home;
+    private javax.swing.JLabel homeExpenseShow;
+    private javax.swing.JLabel homeIncomeShow;
     private javax.swing.JPanel homechild;
     private javax.swing.JLabel homtxtbtn;
     private javax.swing.JTextField ic_date_txt;
     private javax.swing.JLabel incobtn;
     private javax.swing.JTextField income_amount_txt;
     private javax.swing.JLabel income_balance_show;
-    private javax.swing.JLabel income_balance_show1;
-    private javax.swing.JLabel income_balance_show2;
     private javax.swing.JTextField income_category_txt;
     private javax.swing.JTextArea income_description_txt;
     private javax.swing.JTable income_table;
@@ -943,18 +1109,22 @@ public class dashboardFrame extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanel6;
+    private javax.swing.JPanel jPanel7;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JSeparator jSeparator1;
-    private javax.swing.JTable jTable1;
     private javax.swing.JLabel logout;
     private javax.swing.JPanel mainpanel;
     private javax.swing.JTabbedPane parentpanel;
     private javax.swing.JTextField trans_type_txt;
     private javax.swing.JTextField trans_typetxt;
+    private javax.swing.JTable transactiontbl;
     private javax.swing.JButton update_btn;
     private javax.swing.JButton update_expense_btn;
     // End of variables declaration//GEN-END:variables

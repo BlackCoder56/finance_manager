@@ -5,27 +5,26 @@ import java.sql.Statement;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-//import java.util.logging.Level;
-//import java.util.logging.Logger;
+
 
 
 public class Transaction {
     
-    public Transaction(){
-        getIncomeBalance();
-        getExpenseBalance();
-    }
     
-//    Connection object  
-    Connection conn = null;
     
-    Statement statement;
+//    Connection objects  
+    private Connection conn = null;
     
-    PreparedStatement preparedStatement;
+    private Statement statement;
     
-    ResultSet resultSet;
+    public PreparedStatement preparedStatement;
+    
+    public ResultSet resultSet;
+    
+    public ResultSetMetaData resultSetMetaData;
     
     
 //    Private fields
@@ -37,6 +36,10 @@ public class Transaction {
     
     private double income_balance = 0.0;
     private double expense_balance = 0.0;
+    
+    private Double result_balance = 0.0;
+    
+    private Double calculated_income = 0.0;
     
     private String message;
     
@@ -69,29 +72,33 @@ public class Transaction {
     }
     
     public Double getIncomeBalance(){
-        return income_balance = Balances("Income");
+        calculated_income = Balances("Income") - Balances("Expense");
+        income_balance = calculated_income;
+        return income_balance;
     }
     
     public Double getExpenseBalance(){
-        return expense_balance = Balances("Expense");
+        expense_balance = Balances("Expense");
+        return expense_balance;
     }
     
     public String getMessage(){
         return message;
     }
 
-    public Double Balances(String typeOption){
+    
+    
+    public Double Balances(String typeOption){        
         
-        Double result_balance = 0.0;
         try {
             Class.forName("org.postgresql.Driver");
             conn = DriverManager.getConnection("jdbc:postgresql://localhost:5432/"+"financemanager", "postgres", "");
-            preparedStatement = conn.prepareStatement("SELECT * FROM transaction_tbl where type = ?;");
+            preparedStatement = conn.prepareStatement("SELECT SUM(amount) FROM transaction_tbl where type = ?;");
             preparedStatement.setString(1, typeOption);
             resultSet = preparedStatement.executeQuery();
             
-            while(resultSet.next()){
-                result_balance = resultSet.getDouble("amount");
+            if(resultSet.next()){
+                result_balance = resultSet.getDouble(1);
             }
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(Transaction.class.getName()).log(Level.SEVERE, null, ex);
@@ -100,6 +107,18 @@ public class Transaction {
         }
         
         return result_balance;
+    }
+    
+    public Connection ConnectionFunc(){
+        try {
+            Class.forName("org.postgresql.Driver");
+            conn = DriverManager.getConnection("jdbc:postgresql://localhost:5432/"+"financemanager", "postgres", "");
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Transaction.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(Transaction.class.getName()).log(Level.SEVERE, null, ex);
+        }            
+            return conn;
     }
     
 /*  Adding transaction in database */
