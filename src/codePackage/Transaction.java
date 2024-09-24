@@ -91,8 +91,7 @@ public class Transaction {
     public Double Balances(String typeOption){        
         
         try {
-            Class.forName("org.postgresql.Driver");
-            conn = DriverManager.getConnection("jdbc:postgresql://localhost:5432/"+"financemanager", "postgres", "");
+            conn = getConnection();
             preparedStatement = conn.prepareStatement("SELECT SUM(amount) FROM transaction_tbl where type = ?;");
             preparedStatement.setString(1, typeOption);
             resultSet = preparedStatement.executeQuery();
@@ -107,25 +106,12 @@ public class Transaction {
         }
         
         return result_balance;
-    }
-    
-    public Connection ConnectionFunc(){
-        try {
-            Class.forName("org.postgresql.Driver");
-            conn = DriverManager.getConnection("jdbc:postgresql://localhost:5432/"+"financemanager", "postgres", "");
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(Transaction.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex) {
-            Logger.getLogger(Transaction.class.getName()).log(Level.SEVERE, null, ex);
-        }            
-            return conn;
-    }
-    
+    }    
+        
 /*  Adding transaction in database */
     public void AddTransaction(){
         try {
-            Class.forName("org.postgresql.Driver");
-            conn = DriverManager.getConnection("jdbc:postgresql://localhost:5432/"+"financemanager", "postgres", "");
+            conn = getConnection();
             String query = String.format(
                     "INSERT INTO transaction_tbl(type, category, amount, date, description) "
                             + "VALUES('%s', '%s', '%f', '%s', '%s');", 
@@ -136,14 +122,23 @@ public class Transaction {
             message = "Transaction added successfully";
             
         } catch (ClassNotFoundException ex) {
-//            Logger.getLogger(Transaction.class.getName()).log(Level.SEVERE, null, ex);
                 message = "SQL error";
         } catch (SQLException ex) {
-//            Logger.getLogger(Transaction.class.getName()).log(Level.SEVERE, null, ex);
                 message = "SQL authentication error";
         }
     }
+   
     
+//    Connection to PostreSQL database Method   
+    public static Connection getConnection() throws ClassNotFoundException, SQLException{        
+        String  database_url = "jdbc:postgresql://localhost:5432/"+"financemanager";
+        String user = "postgres";
+        String password = "";        
+       
+        Class.forName("org.postgresql.Driver");
+        return DriverManager.getConnection(database_url,user, password);
+           
+    }
     
 
 }
