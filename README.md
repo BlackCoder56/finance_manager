@@ -1,6 +1,3 @@
-Here’s the `README.md` file in proper markdown format for your **Finance Manager** app:
-
----
 
 # Finance Manager
 
@@ -37,10 +34,10 @@ Finance Manager is a Java-based desktop application designed to help users manag
 ## Screenshots
 
 ### Dashboard (Pie Chart and Bar Graph)
-*Insert screenshot here*
+
 
 ### PDF Financial Statement Generation
-*Insert screenshot here*
+
 
 ## Technologies
 
@@ -64,6 +61,4 @@ Contributions are welcome! Fork this repository, make your changes, and submit a
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
----
 
-This format ensures proper markdown syntax for clear readability on GitHub or other markdown-supported platforms.
