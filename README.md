@@ -53,9 +53,6 @@ Finance Manager is a Java-based desktop application designed to help users manag
 - Integration with cloud storage for backup.
 - Custom date range filters for reports.
 
-## Contribution
-
-Contributions are welcome! Fork this repository, make your changes, and submit a pull request.
 
 ## License
 
