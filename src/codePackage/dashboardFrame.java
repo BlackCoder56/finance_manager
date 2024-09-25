@@ -295,6 +295,7 @@ public class dashboardFrame extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        btn_documentGroup = new javax.swing.ButtonGroup();
         mainpanel = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
@@ -359,6 +360,22 @@ public class dashboardFrame extends javax.swing.JFrame {
         jPanel6 = new javax.swing.JPanel();
         income_balance_show = new javax.swing.JLabel();
         jLabel14 = new javax.swing.JLabel();
+        stationery = new javax.swing.JPanel();
+        jScrollPane7 = new javax.swing.JScrollPane();
+        stationeryTable = new javax.swing.JTable();
+        jPanel8 = new javax.swing.JPanel();
+        jLabel23 = new javax.swing.JLabel();
+        jPanel9 = new javax.swing.JPanel();
+        jRadioButton2 = new javax.swing.JRadioButton();
+        jRadioButton1 = new javax.swing.JRadioButton();
+        datePick = new javax.swing.JPanel();
+        jLabel3 = new javax.swing.JLabel();
+        startdatepicker = new com.toedter.calendar.JDateChooser();
+        jLabel2 = new javax.swing.JLabel();
+        enddatepicker = new com.toedter.calendar.JDateChooser();
+        viewBtn = new javax.swing.JButton();
+        printBtn = new javax.swing.JButton();
+        refreshBtn = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Finance Manager");
@@ -733,14 +750,14 @@ public class dashboardFrame extends javax.swing.JFrame {
                         .addComponent(jLabel21)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 365, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(34, 114, Short.MAX_VALUE))
+                .addGap(34, 112, Short.MAX_VALUE))
         );
         expenseChildLayout.setVerticalGroup(
             expenseChildLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(expenseChildLayout.createSequentialGroup()
                 .addGap(20, 20, 20)
                 .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 81, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 101, Short.MAX_VALUE)
                 .addGroup(expenseChildLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(expenseChildLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel20)
@@ -912,14 +929,14 @@ public class dashboardFrame extends javax.swing.JFrame {
                     .addGroup(homechildLayout.createSequentialGroup()
                         .addGap(81, 81, 81)
                         .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(86, Short.MAX_VALUE))
+                .addContainerGap(84, Short.MAX_VALUE))
         );
         homechildLayout.setVerticalGroup(
             homechildLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(homechildLayout.createSequentialGroup()
                 .addGap(23, 23, 23)
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 50, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 70, Short.MAX_VALUE)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(32, 32, 32)
                 .addComponent(jLabel6)
@@ -1091,14 +1108,14 @@ public class dashboardFrame extends javax.swing.JFrame {
                         .addComponent(jLabel11)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 365, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(114, Short.MAX_VALUE))
+                .addContainerGap(112, Short.MAX_VALUE))
         );
         incomechildLayout.setVerticalGroup(
             incomechildLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(incomechildLayout.createSequentialGroup()
                 .addGap(20, 20, 20)
                 .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 72, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 81, Short.MAX_VALUE)
                 .addGroup(incomechildLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(incomechildLayout.createSequentialGroup()
                         .addGroup(incomechildLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -1116,7 +1133,7 @@ public class dashboardFrame extends javax.swing.JFrame {
                             .addGroup(incomechildLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                 .addComponent(jLabel10)
                                 .addComponent(income_amount_txt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 48, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 59, Short.MAX_VALUE)
                 .addGroup(incomechildLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel11))
@@ -1130,6 +1147,203 @@ public class dashboardFrame extends javax.swing.JFrame {
         );
 
         parentpanel.addTab("income", incomechild);
+
+        stationery.setBackground(new java.awt.Color(204, 204, 204));
+
+        stationeryTable.setBackground(new java.awt.Color(204, 204, 204));
+        stationeryTable.setFont(new java.awt.Font("FreeMono", 1, 11)); // NOI18N
+        stationeryTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "ID", "Category", "Amount", "Date", "Description"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.String.class, java.lang.Double.class, java.lang.String.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane7.setViewportView(stationeryTable);
+        if (stationeryTable.getColumnModel().getColumnCount() > 0) {
+            stationeryTable.getColumnModel().getColumn(0).setMinWidth(60);
+            stationeryTable.getColumnModel().getColumn(0).setPreferredWidth(60);
+            stationeryTable.getColumnModel().getColumn(0).setMaxWidth(60);
+            stationeryTable.getColumnModel().getColumn(1).setMinWidth(200);
+            stationeryTable.getColumnModel().getColumn(1).setMaxWidth(200);
+            stationeryTable.getColumnModel().getColumn(2).setMinWidth(150);
+            stationeryTable.getColumnModel().getColumn(2).setMaxWidth(150);
+            stationeryTable.getColumnModel().getColumn(3).setMinWidth(100);
+            stationeryTable.getColumnModel().getColumn(3).setMaxWidth(100);
+            stationeryTable.getColumnModel().getColumn(4).setMinWidth(400);
+            stationeryTable.getColumnModel().getColumn(4).setMaxWidth(400);
+        }
+
+        jPanel8.setBackground(new java.awt.Color(102, 102, 102));
+        jPanel8.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(51, 51, 51), 4));
+
+        jLabel23.setFont(new java.awt.Font("FreeMono", 1, 28)); // NOI18N
+        jLabel23.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel23.setText("Select Document to Print");
+
+        javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
+        jPanel8.setLayout(jPanel8Layout);
+        jPanel8Layout.setHorizontalGroup(
+            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel8Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel23)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel8Layout.setVerticalGroup(
+            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jLabel23, javax.swing.GroupLayout.Alignment.TRAILING)
+        );
+
+        jPanel9.setBorder(javax.swing.BorderFactory.createTitledBorder("Select Document"));
+
+        btn_documentGroup.add(jRadioButton2);
+        jRadioButton2.setFont(new java.awt.Font("FreeMono", 0, 20)); // NOI18N
+        jRadioButton2.setText("Balance Sheet");
+
+        btn_documentGroup.add(jRadioButton1);
+        jRadioButton1.setFont(new java.awt.Font("FreeMono", 0, 20)); // NOI18N
+        jRadioButton1.setText("Flow Document");
+
+        javax.swing.GroupLayout jPanel9Layout = new javax.swing.GroupLayout(jPanel9);
+        jPanel9.setLayout(jPanel9Layout);
+        jPanel9Layout.setHorizontalGroup(
+            jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel9Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jRadioButton1)
+                .addGap(18, 18, 18)
+                .addComponent(jRadioButton2)
+                .addContainerGap(17, Short.MAX_VALUE))
+        );
+        jPanel9Layout.setVerticalGroup(
+            jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel9Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jRadioButton1)
+                    .addComponent(jRadioButton2))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        datePick.setBorder(javax.swing.BorderFactory.createTitledBorder("Select Dates"));
+
+        jLabel3.setFont(new java.awt.Font("FreeMono", 0, 20)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(51, 51, 51));
+        jLabel3.setText("Start Date");
+
+        startdatepicker.setForeground(new java.awt.Color(255, 255, 255));
+        startdatepicker.setFont(new java.awt.Font("FreeMono", 0, 20)); // NOI18N
+
+        jLabel2.setFont(new java.awt.Font("FreeMono", 0, 20)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(51, 51, 51));
+        jLabel2.setText("End Date");
+
+        enddatepicker.setForeground(new java.awt.Color(255, 255, 255));
+        enddatepicker.setFont(new java.awt.Font("FreeMono", 0, 20)); // NOI18N
+
+        javax.swing.GroupLayout datePickLayout = new javax.swing.GroupLayout(datePick);
+        datePick.setLayout(datePickLayout);
+        datePickLayout.setHorizontalGroup(
+            datePickLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, datePickLayout.createSequentialGroup()
+                .addContainerGap(35, Short.MAX_VALUE)
+                .addGroup(datePickLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(datePickLayout.createSequentialGroup()
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(enddatepicker, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(datePickLayout.createSequentialGroup()
+                        .addComponent(jLabel3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(startdatepicker, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(34, 34, 34))
+        );
+        datePickLayout.setVerticalGroup(
+            datePickLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(datePickLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(datePickLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(startdatepicker, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel3))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(datePickLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel2)
+                    .addComponent(enddatepicker, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        viewBtn.setFont(new java.awt.Font("FreeMono", 0, 16)); // NOI18N
+        viewBtn.setText("VIEW");
+
+        printBtn.setFont(new java.awt.Font("FreeMono", 0, 16)); // NOI18N
+        printBtn.setText("PRINT");
+
+        refreshBtn.setFont(new java.awt.Font("FreeMono", 0, 16)); // NOI18N
+        refreshBtn.setText("REFRESH");
+
+        javax.swing.GroupLayout stationeryLayout = new javax.swing.GroupLayout(stationery);
+        stationery.setLayout(stationeryLayout);
+        stationeryLayout.setHorizontalGroup(
+            stationeryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(stationeryLayout.createSequentialGroup()
+                .addGroup(stationeryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(stationeryLayout.createSequentialGroup()
+                        .addGap(56, 56, 56)
+                        .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 805, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(stationeryLayout.createSequentialGroup()
+                        .addGap(251, 251, 251)
+                        .addComponent(datePick, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(stationeryLayout.createSequentialGroup()
+                        .addGap(275, 275, 275)
+                        .addComponent(viewBtn)
+                        .addGap(51, 51, 51)
+                        .addComponent(printBtn)
+                        .addGap(65, 65, 65)
+                        .addComponent(refreshBtn))
+                    .addGroup(stationeryLayout.createSequentialGroup()
+                        .addGap(266, 266, 266)
+                        .addGroup(stationeryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jPanel9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(112, Short.MAX_VALUE))
+        );
+        stationeryLayout.setVerticalGroup(
+            stationeryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(stationeryLayout.createSequentialGroup()
+                .addGap(22, 22, 22)
+                .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(49, 49, 49)
+                .addComponent(jPanel9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(datePick, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(52, 52, 52)
+                .addGroup(stationeryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(viewBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(printBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(refreshBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 69, Short.MAX_VALUE)
+                .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(29, 29, 29))
+        );
+
+        parentpanel.addTab("stationery", stationery);
 
         mainpanel.add(parentpanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, -40, 980, 680));
 
@@ -1214,6 +1428,8 @@ public class dashboardFrame extends javax.swing.JFrame {
         resetColor(home);
         resetColor(expensepanel);
         resetColor(incomepanel);
+        
+        parentpanel.setSelectedIndex(3);
     }//GEN-LAST:event_stati_btnMouseClicked
 
     private void stationerypanelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_stationerypanelMouseClicked
@@ -1221,6 +1437,7 @@ public class dashboardFrame extends javax.swing.JFrame {
         resetColor(home);
         resetColor(expensepanel);
         resetColor(incomepanel);
+        parentpanel.setSelectedIndex(3);
     }//GEN-LAST:event_stationerypanelMouseClicked
 
 //   Animations
@@ -1274,6 +1491,9 @@ public class dashboardFrame extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton add_btn;
     private javax.swing.JButton add_expense_btn;
+    private javax.swing.ButtonGroup btn_documentGroup;
+    private javax.swing.JPanel datePick;
+    private com.toedter.calendar.JDateChooser enddatepicker;
     private javax.swing.JLabel exp_btn;
     private javax.swing.JPanel expenseChild;
     private javax.swing.JTextField expense_amount_txt;
@@ -1307,9 +1527,12 @@ public class dashboardFrame extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel19;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel22;
+    private javax.swing.JLabel jLabel23;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel9;
@@ -1320,21 +1543,32 @@ public class dashboardFrame extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
+    private javax.swing.JPanel jPanel8;
+    private javax.swing.JPanel jPanel9;
+    private javax.swing.JRadioButton jRadioButton1;
+    private javax.swing.JRadioButton jRadioButton2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
+    private javax.swing.JScrollPane jScrollPane7;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JLabel logout;
     private javax.swing.JPanel mainpanel;
     private javax.swing.JTabbedPane parentpanel;
+    private javax.swing.JButton printBtn;
+    private javax.swing.JButton refreshBtn;
+    private com.toedter.calendar.JDateChooser startdatepicker;
     private javax.swing.JLabel stati_btn;
+    private javax.swing.JPanel stationery;
+    private javax.swing.JTable stationeryTable;
     private javax.swing.JPanel stationerypanel;
     private javax.swing.JTextField trans_type_txt;
     private javax.swing.JTextField trans_typetxt;
     private javax.swing.JTable transactiontbl;
     private javax.swing.JButton update_btn;
     private javax.swing.JButton update_expense_btn;
+    private javax.swing.JButton viewBtn;
     // End of variables declaration//GEN-END:variables
 }

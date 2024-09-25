@@ -11,8 +11,7 @@ import java.util.logging.Logger;
 
 
 
-public class Transaction {
-    
+public class Transaction {   
     
     
 //    Connection objects  
