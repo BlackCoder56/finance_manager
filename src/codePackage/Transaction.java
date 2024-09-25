@@ -42,6 +42,8 @@ public class Transaction {
     
     private String message;
     
+    private static String enteredPassword;
+    
     
 /*    setters and getters functions     */
     
@@ -70,6 +72,10 @@ public class Transaction {
         this.transaction_description = description;
     }
     
+    public void setPassword(String enteredPassword){
+        Transaction.enteredPassword = enteredPassword;
+    }
+    
     public Double getIncomeBalance(){
         calculated_income = Balances("Income") - Balances("Expense");
         income_balance = calculated_income;
@@ -84,7 +90,6 @@ public class Transaction {
     public String getMessage(){
         return message;
     }
-
     
     
     public Double Balances(String typeOption){        
@@ -98,9 +103,7 @@ public class Transaction {
             if(resultSet.next()){
                 result_balance = resultSet.getDouble(1);
             }
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(Transaction.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex) {
+        } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(Transaction.class.getName()).log(Level.SEVERE, null, ex);
         }
         
@@ -132,9 +135,10 @@ public class Transaction {
     public static Connection getConnection() throws ClassNotFoundException, SQLException{        
         String  database_url = "jdbc:postgresql://localhost:5432/"+"financemanager";
         String user = "postgres";
-        String password = "";        
+        String password = enteredPassword;        
        
         Class.forName("org.postgresql.Driver");
+        
         return DriverManager.getConnection(database_url,user, password);
            
     }

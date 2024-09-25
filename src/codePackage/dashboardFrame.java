@@ -22,6 +22,7 @@ public class dashboardFrame extends javax.swing.JFrame {
    
     public dashboardFrame() {
         initComponents();
+        transaction.setPassword(enterPassword);
         parentpanel.setSelectedIndex(1);
         income_balance_show.setText(String.format("%,.0f", transaction.getIncomeBalance()));
         expense_total_show.setText(String.format("%, .0f", transaction.getExpenseBalance()));      
@@ -50,7 +51,8 @@ public class dashboardFrame extends javax.swing.JFrame {
     private String t_date;
     private String t_desc;
     
-    
+//    Variable to stored SQL password
+    private final String enterPassword = JOptionPane.showInputDialog("Enter SQL password!");
     
     private void AllExpensesTransactions(){
         Connection conn;
