@@ -30,7 +30,7 @@ public class dashboardFrame extends javax.swing.JFrame {
         homeIncomeShow.setText(String.format("%,.0f", transaction.getIncomeBalance()));
         homeExpenseShow.setText(String.format("%, .0f", transaction.getExpenseBalance()));
         
-        AllTransactions();
+//        AllTransactions();
         AllIncomeTransactions();
         AllExpensesTransactions();
         
@@ -45,8 +45,8 @@ public class dashboardFrame extends javax.swing.JFrame {
     Transaction transaction = new Transaction();  
     
 //   Private fields
-    private String t_type;
-    private String t_category;
+//    private String t_type;
+    private String t_name;
     private double t_amount;
     private String t_date;
     private String t_desc;
@@ -61,9 +61,8 @@ public class dashboardFrame extends javax.swing.JFrame {
         
         try {
             conn = Transaction.getConnection();
-            preparedStatement = conn.prepareStatement("SELECT * FROM transaction_tbl WHERE type = ?  ORDER BY id DESC;");
-        
-            preparedStatement.setString(1, "Expense");
+            preparedStatement = conn.prepareStatement("SELECT * FROM expense_tbl ORDER BY id DESC;");        
+//            preparedStatement.setString(1, "Expense");
             resultSet = preparedStatement.executeQuery();
             ResultSetMetaData Rsm = resultSet.getMetaData();
             
@@ -80,7 +79,7 @@ public class dashboardFrame extends javax.swing.JFrame {
                 for(int i = 1; i <= countr; i++)
                 {
                 vector.add("TID0"+resultSet.getString("id"));
-                vector.add(resultSet.getString("category"));
+                vector.add(resultSet.getString("name"));
                 vector.add(resultSet.getDouble("amount"));
                 vector.add(customOutput.format(resultSet.getDate("date")));
                 vector.add(resultSet.getString("description"));              
@@ -104,8 +103,8 @@ public class dashboardFrame extends javax.swing.JFrame {
             
             conn = Transaction.getConnection();
             
-            preparedStatement = conn.prepareStatement("SELECT * FROM transaction_tbl WHERE type = ?  ORDER BY id DESC;");
-            preparedStatement.setString(1, "Income");
+            preparedStatement = conn.prepareStatement("SELECT * FROM income_tbl ORDER BY id DESC;");
+//            preparedStatement.setString(1, "Income");
             resultSet = preparedStatement.executeQuery();
             ResultSetMetaData Rsm = resultSet.getMetaData();
             
@@ -122,7 +121,7 @@ public class dashboardFrame extends javax.swing.JFrame {
                 for(int i = 1; i <= countr; i++)
                 {
                 vector.add("TID0"+resultSet.getString("id"));
-                vector.add(resultSet.getString("category"));
+                vector.add(resultSet.getString("name"));
                 vector.add(resultSet.getDouble("amount"));
                 vector.add(customOutput.format(resultSet.getDate("date")));
                 vector.add(resultSet.getString("description"));              
@@ -138,17 +137,14 @@ public class dashboardFrame extends javax.swing.JFrame {
         }
     }   
     
-    private void AllTransactions(){
-        
-        
-        
+    private void AllTransactions(){     
         
         Connection conn;
         PreparedStatement pst;
         ResultSet rs;
         try {
             conn = Transaction.getConnection();            
-            pst = conn.prepareStatement("SELECT * FROM transaction_tbl ORDER BY id DESC;");
+            pst = conn.prepareStatement("SELECT id, name, amount, date, description FROM income_tbl UNION ALL SELECT id, name, amount, date, description FROM expense_tbl;");
             rs = pst.executeQuery();
             ResultSetMetaData Rsm = rs.getMetaData();
             
@@ -165,14 +161,11 @@ public class dashboardFrame extends javax.swing.JFrame {
                 for(int i = 1; i <= countr; i++)
                 {
                 vector.add("TID0"+rs.getString("id"));
-                vector.add(rs.getString("type"));
-                vector.add(rs.getString("category"));
+                vector.add(rs.getString("name"));
+//                vector.add(rs.getString("category"));
                 vector.add(rs.getDouble("amount"));
                 vector.add(customOutput.format(rs.getDate("date")));
                 vector.add(rs.getString("description"));
-                
-
-                
                 }
                 
                 tableModel.addRow(vector);
@@ -198,20 +191,19 @@ public class dashboardFrame extends javax.swing.JFrame {
         else
          {
              
-            t_type = trans_type_txt.getText();
-            t_category = income_category_txt.getText();
+//            t_name = trans_type_txt.getText();
+            t_name = income_category_txt.getText();
             t_amount = Double.parseDouble(income_amount_txt.getText());
             t_date = ic_date_txt.getDate().toString();
             t_desc = income_description_txt.getText();
              
              
-            transaction.setType(t_type);
-            transaction.setCategory(t_category);
+            transaction.setName(t_name);
             transaction.setAmount(t_amount);
             transaction.setDate(t_date);
             transaction.setDescription(t_desc);
 
-            transaction.AddTransaction();
+            transaction.addIncomeTransaction();
             
                         
             JOptionPane.showMessageDialog(this, transaction.getMessage());
@@ -243,20 +235,19 @@ public class dashboardFrame extends javax.swing.JFrame {
         else
         {
             
-            t_type = trans_typetxt.getText();
-            t_category = expense_category_txt.getText();
+//            t_name = trans_typetxt.getText();
+            t_name = expense_category_txt.getText();
             t_amount = Double.parseDouble(expense_amount_txt.getText());
 //            t_date = expense_date_txt.getDate();
             t_desc = expense_description_txt.getText();
             
             
-            transaction.setType(t_type);
-            transaction.setCategory(t_category);
+            transaction.setName(t_name);
             transaction.setAmount(t_amount);
             transaction.setDate(expense_date_txt.getDate().toString());
             transaction.setDescription(t_desc);
 
-            transaction.AddTransaction();
+            transaction.addExpenseTransaction();
             
                         
             JOptionPane.showMessageDialog(this, transaction.getMessage());
@@ -804,11 +795,11 @@ public class dashboardFrame extends javax.swing.JFrame {
 
             },
             new String [] {
-                "ID", "Type", "Category", "Amount", "Date", "Description"
+                "ID", "Category", "Amount", "Date", "Description"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.Double.class, java.lang.String.class, java.lang.String.class
+                java.lang.Integer.class, java.lang.String.class, java.lang.Double.class, java.lang.String.class, java.lang.String.class
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -819,16 +810,14 @@ public class dashboardFrame extends javax.swing.JFrame {
         if (transactiontbl.getColumnModel().getColumnCount() > 0) {
             transactiontbl.getColumnModel().getColumn(0).setMinWidth(50);
             transactiontbl.getColumnModel().getColumn(0).setMaxWidth(50);
-            transactiontbl.getColumnModel().getColumn(1).setMinWidth(80);
-            transactiontbl.getColumnModel().getColumn(1).setMaxWidth(80);
-            transactiontbl.getColumnModel().getColumn(2).setMinWidth(150);
-            transactiontbl.getColumnModel().getColumn(2).setMaxWidth(150);
+            transactiontbl.getColumnModel().getColumn(1).setMinWidth(150);
+            transactiontbl.getColumnModel().getColumn(1).setMaxWidth(150);
+            transactiontbl.getColumnModel().getColumn(2).setMinWidth(100);
+            transactiontbl.getColumnModel().getColumn(2).setMaxWidth(100);
             transactiontbl.getColumnModel().getColumn(3).setMinWidth(100);
             transactiontbl.getColumnModel().getColumn(3).setMaxWidth(100);
-            transactiontbl.getColumnModel().getColumn(4).setMinWidth(100);
-            transactiontbl.getColumnModel().getColumn(4).setMaxWidth(100);
-            transactiontbl.getColumnModel().getColumn(5).setMinWidth(400);
-            transactiontbl.getColumnModel().getColumn(5).setMaxWidth(400);
+            transactiontbl.getColumnModel().getColumn(4).setMinWidth(400);
+            transactiontbl.getColumnModel().getColumn(4).setMaxWidth(400);
         }
 
         jPanel4.setBackground(new java.awt.Color(102, 102, 102));
