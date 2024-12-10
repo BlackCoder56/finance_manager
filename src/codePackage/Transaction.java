@@ -13,8 +13,7 @@ import java.util.logging.Logger;
 
 public class Transaction {   
     
-    
-//    Connection objects  
+    //    Connection objects  
     private Connection conn = null;
     
     private Statement statement;
@@ -26,7 +25,7 @@ public class Transaction {
     public ResultSetMetaData resultSetMetaData;
     
     
-//    Private fields
+    //    Private fields
     private String transaction_name;
     private double transaction_amount;
     private String transaction_date;
@@ -43,8 +42,15 @@ public class Transaction {
     
     private static String enteredPassword;
     
+    private String transaction_type;
     
-/*    setters and getters functions     */
+    
+    
+    /*    setters and getters functions     */
+    public void setTypeID(String typeId)
+    {
+        this.transaction_type = typeId;
+    }
     
     public void setName(String name)
     {
@@ -85,13 +91,11 @@ public class Transaction {
     public String getMessage(){
         return message;
     }
-    
-    
-    public Double expenseBalances(){        
+     public Double expenseBalances(){        
         
         try {
             conn = getConnection();
-            preparedStatement = conn.prepareStatement("SELECT SUM(amount) FROM expense_tbl;");
+            preparedStatement = conn.prepareStatement("SELECT SUM(amount) FROM expense_table;");
 //            preparedStatement.setString(1, typeOption);
             resultSet = preparedStatement.executeQuery();
             
@@ -109,7 +113,7 @@ public class Transaction {
         
         try {
             conn = getConnection();
-            preparedStatement = conn.prepareStatement("SELECT SUM(amount) FROM income_tbl;");
+            preparedStatement = conn.prepareStatement("SELECT SUM(amount) FROM income_table;");
 //            preparedStatement.setString(1, typeOption);
             resultSet = preparedStatement.executeQuery();
             
@@ -119,18 +123,40 @@ public class Transaction {
         } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(Transaction.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+     
         return result_balance;
     }    
-        
-/*  Adding expense transaction in database */
+    
+    
+     /*  Adding income transaction in database */
+    public void addIncomeTransaction(){
+        try {
+            conn = getConnection();
+            String query;
+            query = String.format(
+                    "INSERT INTO income_table(name, amount,description, date, type) "
+                            + "VALUES('%s','%f', '%s', '%s', '%s');", 
+                    transaction_name, transaction_amount, transaction_description, transaction_date, transaction_type);
+            statement = conn.createStatement();
+            statement.executeUpdate(query);
+            
+            message = "Transaction added successfully";
+            
+        } catch (ClassNotFoundException ex) {
+                message = "SQL error";
+        } catch (SQLException ex) {
+                message = "SQL authentication error";
+        }
+    }
+    
+    /*  Adding expense transaction in database */
     public void addExpenseTransaction(){
         try {
             conn = getConnection();
             String query = String.format(
-                    "INSERT INTO expense_tbl(name, amount,description,date) "
-                            + "VALUES('%s','%f', '%s', '%s');", 
-                    transaction_name, transaction_amount, transaction_description, transaction_date);
+                    "INSERT INTO expense_table(name, amount,description,date, type) "
+                            + "VALUES('%s','%f', '%s', '%s', '%s');", 
+                    transaction_name, transaction_amount, transaction_description, transaction_date, transaction_type);
             statement = conn.createStatement();
             statement.executeUpdate(query);
             
@@ -143,38 +169,16 @@ public class Transaction {
         }
     }
     
-    /*  Adding income transaction in database */
-    public void addIncomeTransaction(){
-        try {
-            conn = getConnection();
-            String query = String.format(
-                    "INSERT INTO income_tbl(name, amount,description,date) "
-                            + "VALUES('%s','%f', '%s', '%s');", 
-                    transaction_name, transaction_amount, transaction_description, transaction_date);
-            statement = conn.createStatement();
-            statement.executeUpdate(query);
-            
-            message = "Transaction added successfully";
-            
-        } catch (ClassNotFoundException ex) {
-                message = "SQL error";
-        } catch (SQLException ex) {
-                message = "SQL authentication error";
-        }
-    }
-   
     
-//    Connection to PostreSQL database Method   
+    //    Connection to PostreSQL database Method   
     public static Connection getConnection() throws ClassNotFoundException, SQLException{        
         String  database_url = "jdbc:postgresql://localhost:5432/"+"financemanager";
         String user = "postgres";
-        String password = enteredPassword;        
+        String password = enteredPassword;
        
         Class.forName("org.postgresql.Driver");
         
         return DriverManager.getConnection(database_url,user, password);
            
     }
-    
-
 }

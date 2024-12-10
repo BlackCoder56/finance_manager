@@ -24,13 +24,13 @@ public class dashboardFrame extends javax.swing.JFrame {
         initComponents();
         transaction.setPassword(enterPassword);
         parentpanel.setSelectedIndex(1);
-        income_balance_show.setText(String.format("%,.0f", transaction.getIncomeBalance()));
+        income_balance_show.setText(String.format("%,.0f", transaction.incomeBalances()));
         expense_total_show.setText(String.format("%, .0f", transaction.getExpenseBalance()));      
         
         homeIncomeShow.setText(String.format("%,.0f", transaction.getIncomeBalance()));
         homeExpenseShow.setText(String.format("%, .0f", transaction.getExpenseBalance()));
-        
-//        AllTransactions();
+        transaction.incomeBalances();
+        AllTransactions();
         AllIncomeTransactions();
         AllExpensesTransactions();
         
@@ -45,7 +45,7 @@ public class dashboardFrame extends javax.swing.JFrame {
     Transaction transaction = new Transaction();  
     
 //   Private fields
-//    private String t_type;
+    private String t_type;
     private String t_name;
     private double t_amount;
     private String t_date;
@@ -61,7 +61,7 @@ public class dashboardFrame extends javax.swing.JFrame {
         
         try {
             conn = Transaction.getConnection();
-            preparedStatement = conn.prepareStatement("SELECT * FROM expense_tbl ORDER BY id DESC;");        
+            preparedStatement = conn.prepareStatement("SELECT * FROM expense_table ORDER BY id DESC;");        
 //            preparedStatement.setString(1, "Expense");
             resultSet = preparedStatement.executeQuery();
             ResultSetMetaData Rsm = resultSet.getMetaData();
@@ -103,7 +103,7 @@ public class dashboardFrame extends javax.swing.JFrame {
             
             conn = Transaction.getConnection();
             
-            preparedStatement = conn.prepareStatement("SELECT * FROM income_tbl ORDER BY id DESC;");
+            preparedStatement = conn.prepareStatement("SELECT * FROM income_table ORDER BY id DESC;");
 //            preparedStatement.setString(1, "Income");
             resultSet = preparedStatement.executeQuery();
             ResultSetMetaData Rsm = resultSet.getMetaData();
@@ -137,6 +137,8 @@ public class dashboardFrame extends javax.swing.JFrame {
         }
     }   
     
+    
+    
     private void AllTransactions(){     
         
         Connection conn;
@@ -144,7 +146,7 @@ public class dashboardFrame extends javax.swing.JFrame {
         ResultSet rs;
         try {
             conn = Transaction.getConnection();            
-            pst = conn.prepareStatement("SELECT id, name, amount, date, description FROM income_tbl UNION ALL SELECT id, name, amount, date, description FROM expense_tbl;");
+            pst = conn.prepareStatement("SELECT id, name, amount, date, description, type FROM income_table UNION ALL SELECT id, name, amount, date, description, type FROM expense_table;");
             rs = pst.executeQuery();
             ResultSetMetaData Rsm = rs.getMetaData();
             
@@ -166,20 +168,62 @@ public class dashboardFrame extends javax.swing.JFrame {
                 vector.add(rs.getDouble("amount"));
                 vector.add(customOutput.format(rs.getDate("date")));
                 vector.add(rs.getString("description"));
+                vector.add(rs.getString("type"));
                 }
                 
                 tableModel.addRow(vector);
                 
-            }
+            }         
             
-            
-        
-
         }   catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(dashboardFrame.class.getName()).log(Level.SEVERE, null, ex);
         }
     }   
  
+    public class Type {
+    String id;
+    String typeName;
+    
+    public Type(String id, String typeName){
+        this.id = id;
+        this.typeName = typeName;
+    }
+    
+    public String toInt(){
+        return id;
+    }
+    
+     public String toString(){
+        return typeName;
+    }
+    
+}
+//    public void LoadType(){
+//        Connection conn;
+//        PreparedStatement pst;
+//        ResultSet rs;
+//        try {
+//            conn = Transaction.getConnection();     
+//            pst = conn.prepareStatement("Select * from type_tbl where type=?");
+//            pst.setString(1, "Income");
+//            rs = pst.executeQuery();
+//            trans_typetxt.removeAll();
+//            
+//            while(rs.next()){
+//                
+//                trans_typetxt.setText(new Type(rs.getString(1),rs.getString(2)));
+//                
+//            }
+//            
+//        
+//        
+//        }   catch (ClassNotFoundException ex) {
+//            Logger.getLogger(dashboardFrame.class.getName()).log(Level.SEVERE, null, ex);
+//        } catch (SQLException ex) {
+//            Logger.getLogger(dashboardFrame.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//    }
+    
     private void addIncomeTransact(){
         
          if(income_category_txt.getText().isEmpty() && 
@@ -191,17 +235,19 @@ public class dashboardFrame extends javax.swing.JFrame {
         else
          {
              
-//            t_name = trans_type_txt.getText();
+            t_type = trans_type_txt.getText();
             t_name = income_category_txt.getText();
             t_amount = Double.parseDouble(income_amount_txt.getText());
             t_date = ic_date_txt.getDate().toString();
             t_desc = income_description_txt.getText();
+//            Type t_type = (Type) trans_type_txt.getText();
              
-             
+            transaction.setTypeID(t_type);
             transaction.setName(t_name);
             transaction.setAmount(t_amount);
             transaction.setDate(t_date);
             transaction.setDescription(t_desc);
+//            transaction.setTypeID(t_type.id);
 
             transaction.addIncomeTransaction();
             
@@ -235,13 +281,13 @@ public class dashboardFrame extends javax.swing.JFrame {
         else
         {
             
-//            t_name = trans_typetxt.getText();
+            t_type = trans_typetxt.getText();
             t_name = expense_category_txt.getText();
             t_amount = Double.parseDouble(expense_amount_txt.getText());
-//            t_date = expense_date_txt.getDate();
+            t_date = expense_date_txt.getDate().toString();
             t_desc = expense_description_txt.getText();
             
-            
+            transaction.setTypeID(t_type);
             transaction.setName(t_name);
             transaction.setAmount(t_amount);
             transaction.setDate(expense_date_txt.getDate().toString());
@@ -795,15 +841,22 @@ public class dashboardFrame extends javax.swing.JFrame {
 
             },
             new String [] {
-                "ID", "Category", "Amount", "Date", "Description"
+                "ID", "Category", "Amount", "Date", "Description", "Type"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.Double.class, java.lang.String.class, java.lang.String.class
+                java.lang.Integer.class, java.lang.String.class, java.lang.Double.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                true, true, true, true, true, false
             };
 
             public Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
             }
         });
         jScrollPane1.setViewportView(transactiontbl);
@@ -816,8 +869,8 @@ public class dashboardFrame extends javax.swing.JFrame {
             transactiontbl.getColumnModel().getColumn(2).setMaxWidth(100);
             transactiontbl.getColumnModel().getColumn(3).setMinWidth(100);
             transactiontbl.getColumnModel().getColumn(3).setMaxWidth(100);
-            transactiontbl.getColumnModel().getColumn(4).setMinWidth(400);
-            transactiontbl.getColumnModel().getColumn(4).setMaxWidth(400);
+            transactiontbl.getColumnModel().getColumn(4).setMinWidth(350);
+            transactiontbl.getColumnModel().getColumn(4).setMaxWidth(350);
         }
 
         jPanel4.setBackground(new java.awt.Color(102, 102, 102));
